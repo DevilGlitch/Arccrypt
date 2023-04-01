@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Text Encryption</title>
+    <style>
+      body {
+        background-color: crimson;
+        color: black;
+      }
+      #container {
+        margin: auto;
+        width: 50%;
+        padding: 10px;
+        background-color: black;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+      input[type="text"] {
+        width: 100%;
+        padding: 5px;
+        margin-bottom: 10px;
+      }
+      input[type="submit"] {
+        background-color: crimson;
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+      }
+      #result {
+        font-size: 18px;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <h1>Text Encryption</h1>
+      <form id="encrypt-form">
+        <label for="key-input">Encryption Key:</label>
+        <input type="text" id="key-input" name="key" required>
+        <label for="text-input">Text to Encrypt:</label>
+        <input type="text" id="text-input" name="text" required>
+        <input type="submit" value="Encrypt">
+      </form>
+      <div id="result"></div>
+    </div>
+    <script>
+      const form = document.getElementById('encrypt-form');
+      const result = document.getElementById('result');
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const key = form.elements.key.value;
+        const text = form.elements.text.value;
+
+        // Send a POST request to the API endpoint with the encryption key and text to be encrypted
+        const response = await fetch('/encrypt', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ key, text })
+        });
+
+        // Get the encrypted text from the API response
+        const data = await response.json();
+        const encryptedText = data.encrypted_text;
+
+        // Display the encrypted text to the user
+        result.textContent = `Encrypted Text: ${encryptedText}`;
+      });
+    </script>
+  </body>
+</html>
